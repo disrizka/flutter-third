@@ -1,102 +1,126 @@
 import 'package:flutter/material.dart';
+import 'package:thirdd/main/stack/widgets/expanded.dart';
+import 'package:thirdd/main/stack/widgets/griview.dart';
+import 'package:thirdd/service/pref_handler.dart';
+import 'package:thirdd/utils/constant/app_color.dart';
+import 'package:thirdd/views/auth/login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  String _selectedItem = 'Grid';
+  bool isDark = false;
+
+  void _onItemTapped(String item) {
+    setState(() {
+      _selectedItem = item;
+    });
+  }
+
+  ThemeData dark = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: AppColor.primaryColor,
+    primarySwatch: Colors.amber,
+  );
+  ThemeData light = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: AppColor.secondaryColor,
+    primarySwatch: Colors.deepPurple,
+  );
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/login.png"),
-          fit: BoxFit.cover,
-        ),
+    theme:
+    isDark ? dark : light;
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey,
+        title: const Text('Profile'),
       ),
-
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Welcome Back",
-                  style: TextStyle(
-                    fontFamily: 'Raleway',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 20, 20, 20),
-                  ),
-                ),
-              ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(color: Colors.grey),
+              child: Text(
+                'Layouting',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
-            SizedBox(height: 90),
-            titleField("Email"),
-            textField("email", controller: _emailController),
-            SizedBox(height: 24),
-            titleField("Password"),
-            textField("password", controller: _passwordController),
-
-            SizedBox(height: 24),
-
-            Container(
-              padding: const EdgeInsets.all(16.0),
-
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: Colors.indigoAccent,
-                borderRadius: BorderRadius.circular(50),
-              ),
-
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Login", style: TextStyle(fontSize: 24))],
-              ),
+            titleConst("Layouting"),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Expanded'),
+              onTap: () {
+                _onItemTapped('Expanded');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Grid'),
+              onTap: () {
+                _onItemTapped('Grid');
+              },
+            ),
+            titleConst("Input"),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('TextField'),
+              onTap: () {
+                _onItemTapped('TextField');
+              },
+            ),
+            titleConst("Event"),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Button'),
+              onTap: () {
+                _onItemTapped('Button');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'),
+              onTap: () {
+                PreferenceHandler.removeId();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
             ),
           ],
         ),
       ),
-    );
-  }
-
-  TextField textField(
-    String hintext, {
-    required TextEditingController controller,
-    bool isPassword = false,
-  }) {
-    return TextField(
-      controller: controller,
-      onChanged: (value) {
-        setState(() {});
-      },
-
-      obscuringCharacter: "*",
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(25)),
-        hintText: "Masukkan $hintext",
-        prefixIcon: isPassword ? Icon(Icons.key) : Icon(Icons.email),
-        suffixIcon: isPassword ? Icon(Icons.visibility) : null,
+      body: _buildBody(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.color_lens),
       ),
     );
   }
 
-  Row titleField(String text) {
-    return Row(
-      children: [
-        Text(text, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-      ],
-    );
+  Widget _buildBody() {
+    switch (_selectedItem) {
+      case 'Expanded':
+        return ExpandedScreen();
+      case 'Grid':
+        return GridviewScreen();
+      case 'Logout':
+        return Center(
+          child: Text('Logout Screen', style: TextStyle(fontSize: 24)),
+        );
+      default:
+        return Center(
+          child: Text('Profile Screen', style: TextStyle(fontSize: 24)),
+        );
+    }
   }
 }
+
+Text titleConst(String text) => Text(text, style: TextStyle(fontSize: 24));

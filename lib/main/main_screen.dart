@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:thirdd/database/ScreenFirst.dart';
+import 'package:thirdd/database/create.dart';
+import 'package:thirdd/database/database_instance.dart';
+import 'package:thirdd/database/identitas_model.dart';
 import 'package:thirdd/main/home/home_screen.dart';
 import 'package:thirdd/main/kontak/kontak_screen.dart';
 import 'package:thirdd/main/profile/profile_screen.dart';
 import 'package:thirdd/main/stack/widgets/expanded.dart';
-
-void main() => runApp(const MainScreen());
+import 'package:thirdd/views/auth/login_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({super.key, required this.email, required this.phone});
+  final String email;
+  final String phone;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -16,13 +21,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    KontakScreen(),
-    ProfileScreen(),
-    ExpandedScreen(),
-    
-  ];
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   HomeScreen(email: widget.email,),
+  //   KontakScreen(),
+  //   ProfileScreen(),
+  //   ExpandedScreen(),
+  // ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -32,6 +36,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      HomeScreen(email: widget.email, phone: widget.phone),
+      KontakScreen(),
+      ProfileScreen(),
+      ExpandedScreen(),
+    ];
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -107,16 +117,60 @@ class _MainScreenState extends State<MainScreen> {
               },
             ),
 
+            // SizedBox(height: 20),
+            // FutureBuilder<List<IdentitasModel>>(
+            //   future: databaseInstance.all(),
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       if (snapshot.data!.length == 0) {
+            //         return Center(child: Text('data masih kosong'));
+            //       }
+            //       return ListView.builder(
+            //         itemCount: snapshot.data!.length,
+            //         itemBuilder: (context, index) {
+            //           return ListTile(
+            //             onTap: () {
+            //               Navigator.pushReplacement(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                   builder: (context) => const CreateScreen(),
+            //                 ),
+            //               );
+            //             },
+            //             title: Text(snapshot.data![index].name ?? ''),
+            //           );
+            //         },
+            //       );
+            //     } else {
+            //       return Center(
+            //         child: CircularProgressIndicator(color: Colors.amber),
+            //       );
+            //     }
+            //   },
+            // ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: const Icon(Icons.contact_emergency, color: Colors.red),
+              title: const Text('Logout', style: TextStyle(color: Colors.red)),
+              selected: _selectedIndex == 3,
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Screenfirst()),
+                );
+              },
+            ),
+
             SizedBox(height: 20),
             ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text('Logout', style: TextStyle(color: Colors.red)),
               selected: _selectedIndex == 3,
               onTap: () {
-                // Update the state of the app
-                _onItemTapped(2);
-                // Then close the drawer
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
             ),
           ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:thirdd/main/stack/widgets/griview.dart';
 
-
 class ExpandedScreen extends StatelessWidget {
   const ExpandedScreen({super.key});
 
@@ -9,43 +8,30 @@ class ExpandedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(children: [
-          Expanded(
-            flex:3 ,
-            child: Container(
-              color: Colors.red,
-              height: 100,
-              width: 100,
-            ),
-          ),
+        Row(
+          children: [
             Expanded(
-              child: Container(
-              color: Colors.green,
-              height: 100,
-              width: 100,
-                    ),
+              flex: 3,
+              child: Container(color: Colors.red, height: 100, width: 100),
             ),
-        ],),
-        
-        Row(children: [
-          Expanded(
-            flex:2 ,
-            child: Container(
-        
-              color: Colors.blue,
-              height: 100,
-              width: 100,
-            ),
-          ),
             Expanded(
-              child: Container(
-              color: Colors.amber,
-              height: 100,
-              width: 100,
-                    ),
+              child: Container(color: Colors.green, height: 100, width: 100),
             ),
-        ],),
-        Expanded(child: GridviewScreen())
+          ],
+        ),
+
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(color: Colors.blue, height: 100, width: 100),
+            ),
+            Expanded(
+              child: Container(color: Colors.amber, height: 100, width: 100),
+            ),
+          ],
+        ),
+        Expanded(child: GridviewScreen()),
       ],
     );
   }

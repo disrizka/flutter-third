@@ -2,23 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:thirdd/data/list_name.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+  const HomeScreen({super.key, required this.email, required this.phone});
+  final String email;
+  final String phone;
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 500, // Lebar maksimum tiap item (200px)
-        mainAxisSpacing: 10, // Jarak vertikal antar item
-        crossAxisSpacing: 10, // Jarak horizontal antar item
-        childAspectRatio: 8, // Perbandingan lebar-tinggi item
-      ),
-      itemCount: listName.length,
-      itemBuilder: (context, index) {
-        final item = listName[index];
+    return Scaffold(
+      appBar: AppBar(title: const Text('Instagram')),
 
-        return Card(child: Center(child: Text(item)));
-      },
+      body: Column(
+        children: [
+          Text("email $email"),
+          Text("phone $phone"),
+          Expanded(
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider();
+              },
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              // scrollDirection: Axis.horizontal,
+              itemCount: listName.length,
+              itemBuilder: (BuildContext context, int index) {
+                final dataName = listName[index];
+                return Text(dataName, style: TextStyle(fontSize: 20));
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
